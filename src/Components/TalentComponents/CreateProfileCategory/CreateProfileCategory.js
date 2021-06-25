@@ -1,37 +1,34 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { auth } from "../../../firebase";
 import { updateUserData } from "../../../Network/Network";
 
 export default function CreateProfileCategory({ setBtns, btns }) {
   const [inputVal, setinputVal] = useState("");
   const [skillsList, setskillsList] = useState([]);
   let [cat, setCat] = useState("");
-  const catVal = (e) => {
-    cat = e.target.value;
+  const catVal = ({ target }) => {
+    cat = target.value;
     setCat(cat);
   };
-  const skillVal=(e)=>{
-    setinputVal(e.target.value)
+  const skillVal = ({ target }) => {
+    setinputVal(target.value)
   }
 
   const addData = () => {
     updateUserData("talent", {
-       jobCategory: cat,
-       authID:auth.currentUser.uid ,
-       skills:skillsList,
+      jobCategory: cat,
+      jobCategoryAr: cat === "Graphic Design" ? "تصميم الجرافيك" : cat === "Web Development" ? "تطوير الويب" : cat === "Front-End Development" ? "تطوير الواجهة الأمامية" : cat === "Web Design" ? "تصميم الويب" : "تطوير الهاتف",
+      skills: skillsList,
       profileCompletion: 20
     });
     setBtns({ ...btns, expertiseLevel: false })
   }
   const addskills = () => {
-    let arr2=[...skillsList,inputVal];
+    let arr2 = [...skillsList, inputVal];
     setskillsList(arr2);
     setinputVal("")
     console.log(skillsList);
-  //  setskillsList([...skillsList,inputVal]);
-  //  console.log(skillsList);
   };
 
   return (
@@ -48,7 +45,7 @@ export default function CreateProfileCategory({ setBtns, btns }) {
           onChange={catVal}
         >
           <option selected value="Select a category">Select a category</option>
-          <option value="Mobile Development">Front-End Development</option>
+          <option value="Front-End Development">Front-End Development</option>
           <option value="Web Development">Web Development</option>
           <option value="Web Design">Web Design</option>
           <option value="Graphic Design">Graphic Design</option>
@@ -64,17 +61,17 @@ export default function CreateProfileCategory({ setBtns, btns }) {
               value={inputVal}
               onChange={skillVal}
             />
-            <button className="btn bg-upwork px-5" onClick={addskills}>
+            <button className="btn bg-upwork px-5" onClick={addskills} disabled={!inputVal}>
               Add
             </button>
           </div>
-        <div className="my-4 d-flex justify-content-start">
-          {skillsList.map((item)=>
-          <div  className="chip mb-3 ms">
-            <span>{item}</span>
+          <div className="my-4 d-flex justify-content-start flex-wrap">
+            {skillsList.map((item) =>
+              <div className="chip mb-3 ms">
+                <span>{item}</span>
+              </div>
+            )}
           </div>
-          )}
-          </div>  
         </>
       </div>
       <div className="px-4 my-3 pt-4 border-top d-flex justify-content-end">

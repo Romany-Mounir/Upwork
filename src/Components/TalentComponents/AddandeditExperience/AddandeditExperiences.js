@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { talentDataAction } from "../../../Store/actions/talentData";
 import { useTranslation } from "react-i18next";
-import ShowMore from 'react-show-more-button/dist/module';
-import { updateUserData } from "../../../Network/Network";
 
 export default function AddandeditExperience() {
   const user = useSelector((state) => state.talentData);
@@ -16,7 +14,7 @@ export default function AddandeditExperience() {
   useEffect(() => {
     dispatch(talentDataAction());
   }, []);
-  
+
 
   const updateAddandeditExperience = (e) => {
     const val = e.target.value;
@@ -82,7 +80,6 @@ export default function AddandeditExperience() {
                   <div className="row">
                     <div className="col-8">
                       <p
-                        style={{ fontFamily: "Gotham SSm" }}
                         key={index}
                         className="mb-0"
                       >
@@ -243,8 +240,8 @@ export default function AddandeditExperience() {
                     Subject
                   </label>
                   <input
-                  onChange={updateAddandeditExperience}
-                  name="subject"
+                    onChange={updateAddandeditExperience}
+                    name="subject"
                     type="text"
                     className="form-control"
                     id="exampleFormControlInput1"
@@ -258,8 +255,8 @@ export default function AddandeditExperience() {
                     Description
                   </label>
                   <textarea
-                  onChange={updateAddandeditExperience}
-                  name="description"
+                    onChange={updateAddandeditExperience}
+                    name="description"
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows={5}
@@ -281,7 +278,7 @@ export default function AddandeditExperience() {
               >
                 Cancel
               </button>
-              <button  type="button" className="btn btn-default border rounded">
+              <button type="button" className="btn btn-default border rounded">
                 Save{" "}
               </button>
             </div>

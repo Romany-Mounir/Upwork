@@ -5,8 +5,8 @@ import { updateUserData } from "../../../Network/Network";
 export default function CreateProfileEducationAndEmployment({ setBtns, btns }) {
 
   const [user, setuser] = useState({
-    school: "",
-    company: [{ companyName: "", jobTitile: "", stillWork: false }],
+    education: { school: "", areaOfStudy: "", degree: "", gradYear: "" },
+    company: [{ companyName: "", jobTitle: "", stillWork: false }],
     profileCompletion: 40,
   });
 
@@ -15,13 +15,23 @@ export default function CreateProfileEducationAndEmployment({ setBtns, btns }) {
     const name = e.target.name;
     switch (name) {
       case "school":
-        setuser({ ...user, school: val });
+        setuser({ ...user, education: { ...user.education, school: val } });
+        break;
+      case "area":
+        setuser({ ...user, education: { ...user.education, areaOfStudy: val } });
+        break;
+      case "degree":
+        setuser({ ...user, education: { ...user.education, degree: val } });
+        break;
+      case "year":
+        console.log(val);
+        setuser({ ...user, education: { ...user.education, gradYear: val } });
         break;
       case "company":
         setuser({ ...user, company: [{ ...user.company[0], companyName: val }] });
         break;
       case "title":
-        setuser({ ...user, company: [{ ...user.company[0], jobTitile: val }] });
+        setuser({ ...user, company: [{ ...user.company[0], jobTitle: val }] });
         break;
       case "stillwork":
         setuser({
@@ -37,7 +47,7 @@ export default function CreateProfileEducationAndEmployment({ setBtns, btns }) {
   const updateUser = () => {
     console.log(user);
     updateUserData("talent", user);
-    setBtns({ ...btns, language: false })
+    setBtns({ ...btns, language: false });
   };
 
   return (
@@ -54,6 +64,33 @@ export default function CreateProfileEducationAndEmployment({ setBtns, btns }) {
               className="form-control shadow-none"
               name="school"
               placeholder="Ex: Northwestern University"
+              onInput={getUserData}
+            />
+          </label>
+          <label className="w-100 my-2">
+            Area of study
+            <input
+              className="form-control shadow-none"
+              name="area"
+              placeholder="Ex: Economy"
+              onInput={getUserData}
+            />
+          </label>
+          <label className="w-100">
+            Degree
+            <input
+              className="form-control shadow-none"
+              name="degree"
+              placeholder="Ex: Bachelor of commerce"
+              onInput={getUserData}
+            />
+          </label>
+          <label className="w-100 my-2">
+            Graduation year
+            <input
+              type="date"
+              className="form-control shadow-none"
+              name="year"
               onInput={getUserData}
             />
           </label>
@@ -94,7 +131,7 @@ export default function CreateProfileEducationAndEmployment({ setBtns, btns }) {
             Back
         </Link>
         </button>
-        <button className={`btn ${user.school === "" && "disabled"}`}>
+        <button className={`btn ${user?.education?.school === "" && "disabled"}`}>
           <Link
             className="btn bg-upwork px-5"
             to="/create-profile/language"

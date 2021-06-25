@@ -1,16 +1,24 @@
-/* eslint-disable */
-import React from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import HeaderSearchSm from "../../SharedComponents/HeaderSearchSm/HeaderSearchSm";
-import { Link, useHistory } from "react-router-dom";
-import firebaseApp from "../../../firebase";
-import { useTranslation } from "react-i18next";  
-import { useSelector } from "react-redux";
+import { Link, NavLink, useHistory } from "react-router-dom";
+import firebaseApp, { auth } from "../../../firebase";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import img from "../../../assets/img/icon-user.svg";
+import { talentDataAction } from "../../../Store/actions/talentData";
 
 
 export default function NavSmallScreen() {
-let lang = useSelector(state => state.lang);
-const { t } = useTranslation();
+  let lang = useSelector(state => state.lang);
+  const { t } = useTranslation();
   const { push } = useHistory();
+  const user = useSelector(state => state.talentData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(talentDataAction());
+  }, []);
 
   const logout = () => {
     firebaseApp
@@ -36,36 +44,23 @@ const { t } = useTranslation();
           </li>
           <li className="dropdown px-3">
             <a
-              className={`nav-link dropdown-toggle mt-4 pt-4 border-top-cn ${lang='ar'&&"fs-4"}`}
+              className={`nav-link dropdown-toggle mt-4 pt-4 border-top-cn ${lang = 'ar' && "fs-4"}`}
               href="#"
               id="navbarDropdownMenuLink"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 14 14"
-                width="40"
-                height="40"
-                role="img"
-                style={{ marginTop: "-10px" }}
-              >
-                <path
-                  fillRule="evenodd"
-                  fill="white"
-                  d="M7 12.6a5.6 5.6 0 0 1-4.64-2.47C2.94 8.78 4.49 7.88 7 7.88s4.06.9 4.64 2.25A5.6 5.6 0 0 1 7 12.6M7 1.45a2.76 2.76 0 1 1 0 5.53 2.76 2.76 0 0 1 0-5.53M7 0a7 7 0 1 0 .02 14.02A7 7 0 0 0 7 0"
-                ></path>
-              </svg>{" "}
-              {t("Name")}
-              <i className="fa fa-sort-down text-white float-end"></i>
+              <img style={{ height: "50px", width: "50px" }} className="circle bg-white me-2" src={user?.profilePhoto ? user?.profilePhoto : img} alt="" />
+              {user?.firstName + " " + user?.lastName}
+              {/* <i className="fa fa-sort-down text-white float-end"></i> */}
             </a>
-            <ul
+            {/* <ul
               id="acc-id"
               className="dropdown-menu"
               aria-labelledby="navbarDropdownMenuLink"
-            >
-              <li className="px-4 py-3">
+            > */}
+            {/* <li className="px-4 py-3">
                 <div
                   id="acc-btns-id"
                   className="btn-group w-100"
@@ -80,8 +75,8 @@ const { t } = useTranslation();
                     {t("Invisible")}
                   </button>
                 </div>
-              </li>
-              <li>
+              </li> */}
+            {/* <li>
                 <Link className="dropdown-item px-4" to="/find-work">
                   <div className="d-flex align-items-center">
                     <span style={{ marginLeft: "-5px" }}>
@@ -93,8 +88,8 @@ const { t } = useTranslation();
                     </div>
                   </div>
                 </Link>
-              </li>
-              <li>
+              </li> */}
+            {/* <li>
                 <Link
                   className="dropdown-item px-4 mb-1"
                   to="/home"
@@ -110,12 +105,12 @@ const { t } = useTranslation();
                     </div>
                   </div>
                 </Link>
-              </li>
-            </ul>
+              </li> */}
+            {/* </ul> */}
           </li>
           <li className="dropdown px-3">
             <a
-              className={`nav-link active dropdown-toggle mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-5"}`}
+              className={`nav-link active dropdown-toggle mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-5"}`}
               href="#"
               id="navbarDropdownMenuLink"
               role="button"
@@ -145,30 +140,30 @@ const { t } = useTranslation();
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <Link className="dropdown-item" to={`/profile/${auth.currentUser?.uid}`}>
                   {t("Profile")}
-                </a>
+                </Link>
               </li>
-              <li>
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("My Stats")}
                 </a>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("Upwork Readiness Test")}
                 </a>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("My Project Dashboard")}
                 </a>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li className="dropdown px-3">
             <a
-              className={`nav-link dropdown-toggle mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`}
+              className={`nav-link dropdown-toggle mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`}
               href="#"
               id="navbarDropdownMenuLink"
               role="button"
@@ -193,15 +188,15 @@ const { t } = useTranslation();
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
-                  {t("Work Diary")}
-                </a>
+                <Link className="dropdown-item" to="/offers">
+                  {t("Offerss")}
+                </Link>
               </li>
             </ul>
           </li>
           <li className="dropdown px-3">
             <a
-              className={`nav-link dropdown-toggle mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`}
+              className={`nav-link dropdown-toggle mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`}
               href="#"
               id="navbarDropdownMenuLink"
               role="button"
@@ -220,69 +215,69 @@ const { t } = useTranslation();
                   {t("Overview")}
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("My Reports")}
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a className="dropdown-item" href="#">
                   {t("Lifetime Billings by Client")}
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("Connects History")}
                 </a>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("Transaction History")}
                 </a>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <a className="dropdown-item" href="#">
                   {t("Certificate of Earnings")}
                 </a>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li className="nav-item px-3">
-            <Link className={`nav-link mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} to="/messages">
+            <Link className={`nav-link mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} to="/messages">
               {t("Messages")}
             </Link>
           </li>
-          <li className="nav-item px-3">
-            <a className={`nav-link mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} href="#">
+          {/* <li className="nav-item px-3">
+            <a className={`nav-link mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} href="#">
               {t("Help")}
               <i className="fas fa-question float-end"></i>
             </a>
-          </li>
+          </li> */}
           <li className="nav-item px-3">
-            <a className={`nav-link mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} href="#">
+            <NavLink className={`nav-link mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} to="/notifications">
               {t("Notification")}
               <i className="far fa-bell float-end"></i>
-            </a>
+            </NavLink>
           </li>
-          <li className="nav-item px-3">
-            <a className={`nav-link mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} href="#">
+          {/* <li className="nav-item px-3">
+            <a className={`nav-link mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} href="#">
               {t("Direct Contracts")}
               <i
                 className="far fa-paper-plane float-end"
                 style={{ transform: "scaleX(-1)" }}
               ></i>
             </a>
-          </li>
-          <li className="nav-item">
-            <a className={`dropdown-item mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} href="#">
+          </li> */}
+          {/* <li className="nav-item">
+            <a className={`dropdown-item mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} href="#">
               <span>
                 <i className="fa fa-cog"></i>
               </span>
               <span className="ps-3">{t("Settings")}</span>
             </a>
-          </li>
+          </li> */}
           <li className="nav-item pb-2" onClick={logout}>
-            <a className={`dropdown-item mt-2 pt-3 border-top-cn ${lang='ar'&&"fs-4"}`} href="#">
+            <a className={`dropdown-item mt-2 pt-3 border-top-cn ${lang = 'ar' && "fs-4"}`} href="#">
               <span>
                 <i className="fas fa-sign-out-alt"></i>
               </span>

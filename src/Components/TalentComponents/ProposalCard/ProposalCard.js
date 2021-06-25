@@ -1,39 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import { auth, db, storage } from "../../../firebase";
+import { db } from "../../../firebase";
 import { Link } from "react-router-dom";
+import Loader from './../../SharedComponents/Loader/Loader';
 
-export default function ProposalCard({ jobId }) {
-  const [jobdata, setJobData] = useState({});
-  const { t } = useTranslation();
+export default function ProposalCard({ proposal, jobId, ind }) {
+
+  const [jobData, setJobData] = useState({});
+
   useEffect(() => {
     db.collection("job")
       .doc(jobId)
-      .get()
-      .then((res) => {
-        setJobData(res.data());
+      .onSnapshot(doc => {
+        setJobData(doc.data());
       });
-    console.log(jobdata);
   }, []);
+
   return (
-    <div>
-      <div className="row">
-        <div className="col">
+    <>
+      {
+        jobId
+          &&
+          jobData?.jobTitle ?
           <div>
-            {new Date(jobdata?.postTime?.seconds * 1000).toLocaleString()}
+            <div className="row">
+              <div className="col">
+                <div>
+                  {
+                    proposal.status === "proposal"
+                      ? new Date(proposal.proposalTime?.seconds * 1000).toLocaleString()
+                      : new Date(proposal.startContractTime?.seconds * 1000).toLocaleString()
+                  }
+                </div>
+              </div>
+              <Link
+                to={`/job/applied/${jobId}`}
+                className="col-6 fw-bold text-success "
+              >
+                {jobData.jobTitle}
+              </Link>
+              <div className="col text muted">{jobData.jobCategory}</div>
+            </div>
+            <hr />
           </div>
-        </div>
-        <Link
-          to={`/job/applied/${jobId}`}
-          className="col-6 fw-bold text-success "
-        >
-          {jobdata?.jobTitle}
-        </Link>
-        <div className="col text muted">{jobdata?.jobCategory}</div>
-      </div>
-      <hr />
-    </div>
+          : ind === 0 && <Loader />
+      }
+    </>
   );
 }

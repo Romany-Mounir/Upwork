@@ -17,7 +17,6 @@
   "Availability": "Availability",
   "Proposals": "Proposals",
   "Contracts": "Contracts",
-  "Search contract": "Search contract, client, or team name",
   "SAVED JOBS": "SAVED JOBS",
   "Figma Prototype": "Figma Prototype",
   "Est. Budget": "Est. Budget",
@@ -78,7 +77,7 @@
   "3. Work together": "3. Work together",
   "Upwork Messages": "Upwork Messages",
   "to securely chat, share files, and collaborate on projects. View progress against project goals with the": "to securely chat, share files, and collaborate on projects. View progress against project goals with the",
-  "Work Diary": "Work Diary",
+  "Offerss": "Offers",
   "tool": "tool",
   "See tips for staying safe on Upwork": "See tips for staying safe on Upwork",
   "4. Pay and invoice through Upwork": "4. Pay and invoice through Upwork",
@@ -169,7 +168,7 @@
   "Work History": "Work History",
   "$20/hr": "$20/hr",
   "Portfolio": "Portfolio",
-  "Search contract, client, or team name": "Search contract, client, or team name",
+  "Search contract": "Search contract",
   "Sort By": "Sort By",
   "3 total": "3 total",
   "Download csv": "Download csv",
@@ -508,5 +507,8 @@
   "Initiated": "Initiated",
   "Upwork Terms of Service": "Upwork Terms of Service",
   ", including the": ", including the",
-  "i want to :": "i want to :"
+  "i want to :": "i want to :",
+  "English":"English",
+  "$":"$",
+  "hr":"hr"
 }

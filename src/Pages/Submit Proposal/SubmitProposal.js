@@ -1,7 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import  { auth, db, storage } from "../../firebase";
+import { useSelector } from "react-redux";
+import { auth, db, storage } from "../../firebase";
 import firebase from 'firebase/app';
 import { subCollection, updateUserData } from "../../Network/Network";
 import { Link } from "react-router-dom";
@@ -9,6 +13,7 @@ import SubmitProposalFixed from "../../Components/TalentComponents/SubmitProposa
 import SubmitProposalHourly from "../../Components/TalentComponents/SubmitProposalHourly/SubmitProposalHourly";
 
 export default function SubmitProposal() {
+  const lang = useSelector(state => state.lang);
   const { id } = useParams();
   const { push } = useHistory();
   const [job, setjob] = useState({});
@@ -26,7 +31,6 @@ export default function SubmitProposal() {
       .doc(id)
       .get()
       .then((res) => setjob(res.data()));
-    //talent data
     db.collection("talent")
       .doc(auth.currentUser.uid)
       .get()
@@ -76,8 +80,6 @@ export default function SubmitProposal() {
     }
   };
 
-  let arr = ["s"];
-  arr = job?.skills;
 
   const handlVal = (e) => {
     const val = e.target.value;
@@ -112,9 +114,6 @@ export default function SubmitProposal() {
       default:
         break;
     }
-    {
-
-    }
   };
   const handleRout = () => {
     push({ pathname: "/proposals", state: id })
@@ -124,7 +123,14 @@ export default function SubmitProposal() {
     subCollection(
       "talent",
       "jobProposal",
-      { jobId: id, status: "proposal" },
+      {
+        jobId: id,
+        status: "proposal",
+        proposalTime: firebase.firestore.Timestamp.now(),
+        startContractTime: "",
+        endContractTime: "",
+        budget: parseInt(rate)
+      },
       auth.currentUser.uid
     );
     updateUserData("talent", { connects: user.connects - 2 });
@@ -141,7 +147,7 @@ export default function SubmitProposal() {
         clientId: job.authID,
         budget: parseInt(rate),
         jobPaymentType: job.jobPaymentType,
-        proposalTime:firebase.firestore.Timestamp.now(),
+        proposalTime: firebase.firestore.Timestamp.now(),
       },
       id
     );
@@ -150,14 +156,14 @@ export default function SubmitProposal() {
   return (
     <>
       <main>
-        <div className="container">
-          <h1 className="h3 py-4">Submit a proposal</h1>
+        <div className="container px-5">
+          <p className="h3 py-2 mt-4">Submit a proposal</p>
           <div className="row">
             <div className="col">
               <div className="bg-white border rounded-bottom rounded-top">
                 <h2 className="h4 border-bottom p-4">Proposal settings</h2>
                 <div className="ps-4 pt-2">
-                  <p className="fw-bold">Propose with a Specialized profile</p>
+                  {/* <p className="fw-bold">Propose with a Specialized profile</p> */}
                 </div>
 
                 <div className="ps-4 py-2">
@@ -170,7 +176,7 @@ export default function SubmitProposal() {
                     </p>
                     <p>
                       When you submit this proposal, you'll have
-                    <strong> {user.connects} </strong>remaining
+                    <strong> {user.connects - 2} </strong>remaining
                   </p>
                   </>
                     : <p className="fw-bold text-alert">You Don't Have Enough Connects</p>
@@ -189,7 +195,7 @@ export default function SubmitProposal() {
                     <p className="fw-bold">{job?.jobTitle}</p>
                     <div className="mb-3">
                       <span className="bg-cat-cn py-1 px-2 me-3 rounded-pill">
-                        {job?.jobCategory}
+                        {lang === "ar" ? job?.jobCategoryAr : job?.jobCategory}
                       </span>
                       <span>
                         {new Date(
@@ -198,7 +204,7 @@ export default function SubmitProposal() {
                       </span>
                     </div>
                     <div className="mb-3">
-                      <p>{job.jobDescription}</p>
+                      <p>{job?.jobDescription}</p>
                       <Link to={{
                         pathname: `/job/${id}`,
                         state: `${id}`,
@@ -215,7 +221,7 @@ export default function SubmitProposal() {
                       <span className="ps-2">
                         <strong>Experience Level</strong>
                       </span>
-                      <p className="ps-4">{job?.jobExperienceLevel}</p>
+                      <p className="ps-4">{lang === "ar" ? job?.jobExperienceLevelAr : job?.jobExperienceLevel}</p>
                     </div>
                     <div>
                       <span>
@@ -224,14 +230,14 @@ export default function SubmitProposal() {
                       <span className="ps-2">
                         <strong>Hours to be determined</strong>
                       </span>
-                      <p className="ps-4">{job?.jobPaymentType}</p>
+                      <p className="ps-4">{lang === "ar" ? job?.jobPaymentTypeAr : job?.jobPaymentType}</p>
                     </div>
                     <div>
                       <span>
                         <i className="far fa-calendar-alt" />
                       </span>
                       <span className="ps-2">
-                        <strong>{job?.jobDuration}</strong>
+                        <strong>{lang === "ar" ? job?.jobDurationAr : job?.jobDuration}</strong>
                       </span>
                       <p className="ps-4">Project Length</p>
                     </div>
@@ -239,7 +245,14 @@ export default function SubmitProposal() {
                 </div>
                 <div className="mx-4 py-2 border-top pb-4">
                   <p className="fw-bold">Skills and expertise</p>
-                  {/* {arr.map((e)=><span className="bg-cat-cn py-1 px-2 me-3 rounded-pill">{e}</span>)} */}
+                  {job?.skills?.map((e, i) => <button
+                    key={i}
+                    type="button"
+                    className="btn text-light btn-sm rounded-pill skills mx-1"
+                    style={{ backgroundColor: "#9b9d9f" }}
+                  >
+                    {e}
+                  </button>)}
                 </div>
               </div>
             </div>
@@ -249,7 +262,11 @@ export default function SubmitProposal() {
               <div className="bg-white border rounded-bottom rounded-top">
                 <h2 className="h4 border-bottom p-4">Terms</h2>
                 <div className="ps-4 pt-2 d-flex">
-                  {job?.jobPaymentType == "Fixed Price" ? <SubmitProposalFixed rate={rate} setrate={setrate} /> : <SubmitProposalHourly rate={rate} setrate={setrate} />}
+                  {
+                    job?.jobPaymentType === "Fixed Price"
+                      ? <SubmitProposalFixed rate={rate} setrate={setrate} />
+                      : <SubmitProposalHourly rate={rate} setrate={setrate} />
+                  }
 
 
                   <div className="w-25 m-3 ps-3 d-flex flex-column justify-content-center align-items-center">
@@ -300,12 +317,13 @@ export default function SubmitProposal() {
                 <div className="mx-4 mt-3 py-2 pb-4">
                   <p className="fw-bold">Attachments</p>
                   <div className="d-flex mb-3">
-                    {proposalData.proposalImages &&
-                      proposalData.proposalImages.map((url) => {
+                    {
+                      proposalData?.proposalImages &&
+                      proposalData?.proposalImages.map((url) => {
                         return (
                           <div
                             className="mx-2"
-                            style={{ maxWidth: "50px", maxHeight: "50px" }}
+                            style={{ width: "50px", height: "50px" }}
                           >
                             <img
                               className="w-100 h-100 rounded-circle"
@@ -313,7 +331,8 @@ export default function SubmitProposal() {
                             />
                           </div>
                         );
-                      })}
+                      })
+                    }
                   </div>
                   <div className="attachments-cn">
                     <p className="py-2 text-center mt-2">
@@ -350,7 +369,6 @@ export default function SubmitProposal() {
                     style={{ backgroundColor: "#37a000" }}
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
-                    disabled={!user.connects > 0}
                   >
                     Submit Proposal
                   </button>

@@ -3,18 +3,17 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { talentDataAction } from "../../../Store/actions/talentData";
-import { auth, db, storage } from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import img from "../../../assets/img/icon-user.svg";
+import { useSelector } from "react-redux";
 
-export default function RightSidebarTalentHome() {
+export default function RightSidebarTalentHome({  lang }) {
+
   const { t } = useTranslation();
-
-  const user = useSelector((state) => state.talentData);
   const [talentData, setTalentData] = useState([]);
-  const dispatch = useDispatch();
+  const user = useSelector((state) => state.talentData);
+
   useEffect(() => {
     db.collection("talent")
       .doc(auth.currentUser.uid)
@@ -36,34 +35,33 @@ export default function RightSidebarTalentHome() {
           width="50px"
           height="50px"
         />
-
         <h5 className="d-inline ps-1">{`${user.firstName}`}</h5>
       </div>
       <div className="my-lg-1">
-        <Link to="/profile" className="advanced-search-link ">
+        <Link to={`/profile/${auth.currentUser.uid}`} className="advanced-search-link">
           <i className="fas fa-eye"> </i> {t("View Profile")}
         </Link>
       </div>
-      <div className="my-lg-1 fw-bold">
+      {/* <div className="my-lg-1 fw-bold">
         <p>{t("Visibility")}</p>
       </div>
       <div className="my-lg-1 ">
         <i className="fas fa-globe"> </i>
         <span> {t("Public")}</span>
 
-      </div>
+      </div> */}
       <div className="my-3" />
       <div className="my-lg-1 fw-bold">
-        <p>{t("Availability")}</p>
+        <p className="text-muted">{t("Availability")}</p>
       </div>
       <div className="my-lg-1">
-        <i className="far fa-clock" />
+        <i className="far fa-clock me-2" />
         <span>
-          As Needed
+          {lang === "ar" ? user?.availability === true ? "متاح" : "غير متاح" : user?.availability === true ? "available" : "not available"}
         </span>
         <div className="progress" style={{ height: 5, display: "inline" }}>
           <div
-            className="progress-bar bg-upwork"
+            className="progress-bar bg-upwork my-3"
             role="progressbar"
             style={{ width: `${user.profileCompletion}%` }}
             aria-valuenow={60}
@@ -103,18 +101,6 @@ export default function RightSidebarTalentHome() {
             aria-current="true"
           >
             {user.connects} availabale connects
-          </a>
-        </li>
-        <li
-          className="list-group-item sidebar-homebage-ul-li"
-          aria-current="true"
-        >
-          <a
-            href="#"
-            className=" list-group-item-action advanced-search-link"
-            aria-current="true"
-          >
-            <i className="fas fa-stopwatch" /> Track time with the desktop app
           </a>
         </li>
       </ul>

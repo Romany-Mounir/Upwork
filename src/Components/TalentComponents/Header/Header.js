@@ -1,11 +1,11 @@
-/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import Logo from "./../../SharedComponents/Logo/Logo";
 import HeaderSearchLg from "../../SharedComponents/HeaderSearchLg/HeaderSearchLg";
 import NavLargScreen from './../NavLargScreen/NavLargScreen';
 import NavSmallScreen from './../NavSmallScreen/NavSmallScreen';
-import "./Header.css";
 import HeaderSearchSm from './../../SharedComponents/HeaderSearchSm/HeaderSearchSm';
+import "./Header.css";
+
 export default function Header() {
 
     const [showSearch, setShowSearch] = useState(false);
@@ -24,10 +24,10 @@ export default function Header() {
 
     return (
         <>
-            <header className="nav-bg-cn py-3">
+            <header className="nav-bg-cn py-1">
 
                 {/* Header in large screen */}
-                <div id="nav-lg-id" className="container d-flex justify-content-around align-items-center">
+                <div id="nav-lg-id" className="container d-flex justify-content-between align-items-center">
                     <Logo />
                     <HeaderSearchLg />
                     <nav className="navbar navbar-expand-lg navbar-dark bg-transparent py-0">
